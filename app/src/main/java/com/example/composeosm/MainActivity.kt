@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Инициализация OSMDroid (на случай, если не в Application)
+        // OSMDroid initialization (in case it is not in the Application)
         Configuration.getInstance().load(
             this,
             getSharedPreferences("osmdroid", MODE_PRIVATE)
@@ -38,21 +38,21 @@ fun MapScreen() {
     AndroidView(
         factory = { context ->
             MapView(context).apply {
-                // Устанавливаем источник тайлов — обычная карта
+                // Setting the tile source — a regular map
                 setTileSource(TileSourceFactory.MAPNIK)
 
-                // Включаем жесты масштабирования и прокрутки
+                // Enabling zoom and scroll gestures
                 setBuiltInZoomControls(true)
                 setMultiTouchControls(true)
 
-                // Центр карты — например, Москва
+                // The center of the map is, for example, Moscow
                 controller.setZoom(12.0)
                 controller.setCenter(GeoPoint(55.751244, 37.618423))
             }
         },
         update = { mapView ->
-            // Здесь можно обновлять карту при изменении состояния (например, из ViewModel)
-            // Например: перецентрирование, добавление маркеров и т.д.
+            // Here you can update the map when the state changes (for example, from the ViewModel)
+            // For example: re-centering, adding markers, etc.
         },
         modifier = Modifier.fillMaxSize()
     )
