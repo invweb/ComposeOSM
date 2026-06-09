@@ -13,6 +13,7 @@ composeBom = "2026.05.01"
 material3 = "1.4.0"
 osmdroidAndroid = "6.1.20"
 roomCompiler = "2.8.4"
+timber = "5.0.1"
 ui = "1.11.2"
 hilt = "2.59.2"
 
@@ -39,6 +40,7 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 osmdroid-android = { module = "org.osmdroid:osmdroid-android", version.ref = "osmdroidAndroid" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version = "2.59.2" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version = "2.59.2" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version = "2.3.9" }
