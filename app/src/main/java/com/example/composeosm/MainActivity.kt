@@ -20,8 +20,6 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import timber.log.Timber
-import timber.log.Timber.DebugTree
-import timber.log.Timber.Forest.plant
 import java.io.File
 
 
@@ -30,6 +28,7 @@ import java.io.File
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.READ_EXTERNAL_STORAGE
     )
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
