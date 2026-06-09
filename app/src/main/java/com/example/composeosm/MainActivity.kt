@@ -1,7 +1,7 @@
 package com.example.composeosm
 
 import android.Manifest
-import android.content.Context
+import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat
 import com.example.composeosm.ui.theme.ComposeOSMTheme
 import dagger.hilt.android.AndroidEntryPoint
 import org.osmdroid.config.Configuration
-import org.osmdroid.library.BuildConfig
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -23,7 +22,6 @@ import timber.log.Timber
 import java.io.File
 
 
-    private const val PERMISSIONS_REQUEST_CODE = 100
     private val REQUIRED_PERMISSIONS = arrayOf<String?>(
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.READ_EXTERNAL_STORAGE
@@ -33,17 +31,29 @@ import java.io.File
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //Turning on the Log on debug build
+        Timber.plant(Timber.DebugTree())
 
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+            Constants.REQUEST_CODE
+        )
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            Constants.REQUEST_CODE
+        )
         if(BuildConfig.DEBUG){
-            Timber.plant(Timber.DebugTree())
+            Timber.d("DEBUG build")
         }
 
-        Timber.d("123")
         if (!arePermissionsGranted(this)) {
+            Timber.d("${!arePermissionsGranted(this)}")
             ActivityCompat.requestPermissions(
                 this,
                 REQUIRED_PERMISSIONS,
-                PERMISSIONS_REQUEST_CODE
+                Constants.PERMISSIONS_REQUEST_CODE
             )
         } else {
             initializeMap(this)
@@ -89,7 +99,7 @@ fun MapScreen(activity: MainActivity) {
 
 fun initializeMap(activity: MainActivity) {
     Timber.d("initializeMap")
-    Configuration.getInstance().userAgentValue = activity.packageName
+    Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
 
     val baseDir: File = File(activity.getExternalFilesDir(null), "osmdroid")
     if (!baseDir.exists()) {
@@ -99,14 +109,15 @@ fun initializeMap(activity: MainActivity) {
     Configuration.getInstance().osmdroidTileCache = File(baseDir, "tiles")
 }
 
-private fun arePermissionsGranted(context: Context): Boolean {
+private fun arePermissionsGranted(activity: Activity): Boolean {
     for (permission in REQUIRED_PERMISSIONS) {
         if (ContextCompat.checkSelfPermission(
-                context,
+                activity,
                 permission.toString()
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             Timber.d("arePermissionsGranted: false")
+            ActivityCompat.requestPermissions(activity, REQUIRED_PERMISSIONS, 101)
             return false
         }
     }
